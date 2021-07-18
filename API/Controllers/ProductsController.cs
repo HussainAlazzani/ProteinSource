@@ -9,6 +9,8 @@ using Core.Interfaces;
 using Core.Specifications;
 using API.Dtos;
 using API.Extensions;
+using Microsoft.AspNetCore.Http;
+using API.Errors;
 
 namespace API.Controllers
 {
@@ -47,6 +49,8 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
             var spec = new ProductWithCategoriesAndBrandSpecification(id);
