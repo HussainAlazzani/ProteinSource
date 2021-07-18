@@ -6,6 +6,7 @@ using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Core.Interfaces;
+using Core.Specifications;
 using API.Dtos;
 using API.Extensions;
 
@@ -15,17 +16,26 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductRepository _repo;
+        private readonly IGenericRepository<Product> _productRepository;
+        private readonly IGenericRepository<Brand> _brandRepository;
+        private readonly IGenericRepository<Category> _categoryRepository;
 
-        public ProductsController(IProductRepository repo)
+        public ProductsController(
+            IGenericRepository<Product> productRepository,
+            IGenericRepository<Brand> brandRepository,
+            IGenericRepository<Category> categoryRepository)
         {
-            _repo = repo;
+            _productRepository = productRepository;
+            _brandRepository = brandRepository;
+            _categoryRepository = categoryRepository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProductDto>>> GetProducts()
+        public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts()
         {
-            var products = await _repo.GetProductsAsync();
+            var spec = new ProductsWithCategoriesAndBrandsSpecification();
+
+            var products = await _productRepository.GetAllWithSpecAsync(spec);
 
             var productsDto = new List<ProductDto>();
             foreach (var product in products)
@@ -39,21 +49,24 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
-            var product = await _repo.GetProductByIdAsync(id);
+            var spec = new ProductWithCategoriesAndBrandSpecification(id);
+            var product = await _productRepository.GetWithSpecAsync(spec);
 
-            return product.AsDto();
+            return Ok(product.AsDto());
         }
 
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<Brand>>> GetBrands()
         {
-            return Ok(await _repo.GetBrandsAsync());
+            return Ok(await _brandRepository.GetAllAsync());
         }
 
         [HttpGet("categories")]
         public async Task<ActionResult<IReadOnlyList<CategoryDto>>> GetCategories()
         {
-            var categories = await _repo.GetCategoriesAsync();
+            var spec = new CategoriesWithProductsSpecification();
+
+            var categories = await _categoryRepository.GetAllWithSpecAsync(spec);
             var categoriesDto = new List<CategoryDto>();
 
             foreach (var category in categories)
@@ -62,6 +75,15 @@ namespace API.Controllers
             }
 
             return Ok(categoriesDto);
+        }
+
+        [HttpGet("categories/{id}")]
+        public async Task<ActionResult<CategoryDto>> GetCategory(int id)
+        {
+            var spec = new CategoryWithProductsSpecification(id);
+            var category = await _categoryRepository.GetWithSpecAsync(spec);
+
+            return Ok(category.AsDto());
         }
     }
 }
