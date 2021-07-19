@@ -15,19 +15,34 @@ namespace Infrastructure.Data
     /// <typeparam name="TEntity">The entity to be queried</typeparam>
     public class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
     {
-        public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> query, ISpecification<TEntity> spec)
+        public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity> spec)
         {
-            var q = query;
+            var outputQuery = inputQuery;
 
             if (spec.Criteria != null)
             {
-                q = q.Where(spec.Criteria);
+                outputQuery = outputQuery.Where(spec.Criteria);
             }
 
-            q = spec.Includes.Aggregate(q, (current, include) =>
+            if (spec.OrderBy != null)
+            {
+                outputQuery = outputQuery.OrderBy(spec.OrderBy);
+            }
+
+            if (spec.OrderByDescending != null)
+            {
+                outputQuery = outputQuery.OrderByDescending(spec.OrderByDescending);
+            }
+
+            if (spec.IsPagingEnabled)
+            {
+                outputQuery = outputQuery.Skip(spec.Skip).Take(spec.Take);
+            }
+
+            outputQuery = spec.Includes.Aggregate(outputQuery, (current, include) =>
                 current.Include(include));
 
-            return q;
+            return outputQuery;
         }
     }
 }

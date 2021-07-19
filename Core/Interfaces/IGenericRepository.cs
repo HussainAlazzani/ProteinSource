@@ -15,5 +15,7 @@ namespace Core.Interfaces
 
         Task<TEntity> GetWithSpecAsync(ISpecification<TEntity> spec);
         Task<IReadOnlyList<TEntity>> GetAllWithSpecAsync(ISpecification<TEntity> spec);
+
+        Task<int> CountAsync(ISpecification<TEntity> spec);
     }
 }

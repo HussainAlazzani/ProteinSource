@@ -40,9 +40,18 @@ namespace Infrastructure.Data
         public async Task<TEntity> GetWithSpecAsync(ISpecification<TEntity> spec)
         {
             var query = _context.Set<TEntity>().AsQueryable();
-            var evaluateQuery = SpecificationEvaluator<TEntity>.GetQuery(query, spec);
+            var evaluatedQuery = SpecificationEvaluator<TEntity>.GetQuery(query, spec);
 
-            return await evaluateQuery.FirstOrDefaultAsync();
+            return await evaluatedQuery.FirstOrDefaultAsync();
         }
+
+        public Task<int> CountAsync(ISpecification<TEntity> spec)
+        {
+            var query = _context.Set<TEntity>().AsQueryable();
+            var evaluatedQuery = SpecificationEvaluator<TEntity>.GetQuery(query, spec);
+
+            return evaluatedQuery.CountAsync();
+        }
+
     }
 }
