@@ -124,29 +124,36 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// This method requires 2 rounds of database requests; one for requesting category and then for products separately.
-        /// Must make it more efficient by requesting the category and including the products with the result. This requires
-        /// the creation of a new specification and perhaps a new query evalutor.
+        /// This method requires 3 rounds of database requests:
+        /// The first requests the category by its id without including the products.
+        /// The second requests the products without filtering to get the total number of products in that category.
+        /// The third requests the filtered products.
+        /// This method can be made more efficient by including products when requesting the category.
         /// </summary>
-        [HttpGet("categories/filtered/{id}")]
-        public async Task<ActionResult<Pagination<CategoryDto>>> GetFilteredCategory(int id, [FromQuery] CategorySpecParams categorySpecParams)
+        [HttpGet("categories/filtered/")]
+        public async Task<ActionResult<Pagination<CategoryDto>>> GetFilteredCategory([FromQuery] CategorySpecParams categorySpecParams)
         {
-            var categorySpec = new CategoryWithProductsSpecification(id);
+            if (categorySpecParams.CategoryId <= 0) categorySpecParams.CategoryId = 1;
+
+            var categorySpec = new CategoryWithNoProductsSpecification(categorySpecParams.CategoryId);
             var category = await _categoryRepository.GetWithSpecAsync(categorySpec);
 
             // Get the products that fall under the category selected
             var productSpecParams = new ProductSpecParams
             {
-                CategoryId = id,
+                CategoryId = categorySpecParams.CategoryId,
                 PageSize = categorySpecParams.PageSize,
                 PageIndex = categorySpecParams.PageIndex,
                 Sort = categorySpecParams.Sort,
             };
 
-            var productSpec = new ProductsWithCategoryAndBrandSpecification(productSpecParams);
+            // Request the products that fall under the specified category. 
+            // The products will not include the navigation properties, ie. brand ids and categories.
             var countSpec = new ProductsWithFiltersForCountSpecification(productSpecParams);
-
             var totalProducts = await _productRepository.CountAsync(countSpec);
+
+            // Request the filtered producst that fall under the specified category. Include navigation properties.
+            var productSpec = new ProductsWithCategoryAndBrandSpecification(productSpecParams);
             var products = await _productRepository.GetAllWithSpecAsync(productSpec);
 
             category.Products = products.ToList();
