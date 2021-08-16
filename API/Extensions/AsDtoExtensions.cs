@@ -20,7 +20,7 @@ namespace API.Extensions
                 Price = product.Price,
                 PreviousPrice = product.PreviousPrice,
                 Description = product.Description,
-                PictureUrl = product.PictureUrl,
+                ImageUrl = product.ImageUrl,
                 Rating = product.Rating,
 
                 Brand = product.Brand.Name,

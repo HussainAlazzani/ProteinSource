@@ -20,7 +20,7 @@ namespace Infrastructure.Data.Configuration
             builder.Property(p => p.Price).HasColumnType("decimal(10,2)");
             builder.Property(p => p.PreviousPrice).HasColumnType("decimal(10,2)");
             builder.Property(p => p.Rating).IsRequired();
-            builder.Property(p => p.PictureUrl);
+            builder.Property(p => p.ImageUrl);
             builder.Property(p => p.Description);
 
             builder

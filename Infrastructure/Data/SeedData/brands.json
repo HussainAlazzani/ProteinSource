@@ -1,35 +1,57 @@
 [
-	{
-		"Name": "USN"
-	},
-	{
-		"Name": "Optimum Health"
-	},
-	{
-		"Name": "Sci-MX"
-	},
-	{
-		"Name": "PhD Nutrition"
-	},
-	{
-		"Name": "MyProtein"
-	},
-	{
-		"Name": "The Protein Works"
-	},
-	{
-		"Name": "tom Oliver Nutrition"
-	},
-	{
-		"Name": "Vivo Life"
-	},
-	{
-		"Name": "Applied Nutrition"
-	},
-	{
-		"Name": "Innermost"
-	},
-	{
-		"Name": "PBN"
-	}	
+  {
+    "Id": 1,
+    "Name": "USN",
+    "ImageUrl": "/images/brands/usn_logo.png"
+  },
+  {
+    "Id": 2,
+    "Name": "Optimum Health",
+    "ImageUrl": "/images/brands/optimumhealth_logo.jpg"
+  },
+  {
+    "Id": 3,
+    "Name": "Sci-MX",
+    "ImageUrl": "/images/brands/scimx_logo.jpg"
+  },
+  {
+    "Id": 4,
+    "Name": "PhD Nutrition",
+    "ImageUrl": "/images/brands/phd_logo.png"
+  },
+  {
+    "Id": 5,
+    "Name": "High5",
+    "ImageUrl": "/images/brands/high5_logo.png"
+  },
+  {
+    "Id": 6,
+    "Name": "Optimum Nutrition",
+    "ImageUrl": "/images/brands/optimumnutrition_logo.png"
+  },
+  {
+    "Id": 7,
+    "Name": "BSN",
+    "ImageUrl": "/images/brands/bsn_logo.png"
+  },
+  {
+    "Id": 8,
+    "Name": "Vivo Life",
+    "ImageUrl": "/images/brands/vivolife_logo.jpg"
+  },
+  {
+    "Id": 9,
+    "Name": "Applied Nutrition",
+    "ImageUrl": "/images/brands/appliednutrition_logo.png"
+  },
+  {
+    "Id": 10,
+    "Name": "Efectiv Nutrition",
+    "ImageUrl": "/images/brands/efectiv_logo.png"
+  },
+  {
+    "Id": 11,
+    "Name": "Grenade",
+    "ImageUrl": "/images/brands/grenade_logo.png"
+  }
 ]

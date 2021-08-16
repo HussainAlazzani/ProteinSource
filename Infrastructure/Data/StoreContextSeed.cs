@@ -14,7 +14,7 @@ namespace Infrastructure.Data
     {
         public static async Task SeedAsync(StoreContext context, ILoggerFactory loggerFactory)
         {
-            // Seed data contained the the json file if the database is empty.
+            // Seed data contained in the json file if the database is empty.
             try
             {
                 if (!context.Brands.Any() && !context.Categories.Any() && !context.Products.Any())
@@ -22,18 +22,8 @@ namespace Infrastructure.Data
                     var brandsJson = File.ReadAllText("../Infrastructure/Data/SeedData/brands.json");
                     var brands = JsonSerializer.Deserialize<List<Brand>>(brandsJson);
 
-                    foreach (var brand in brands)
-                    {
-                        context.Brands.Add(brand);
-                    }
-
                     var categoriesJson = File.ReadAllText("../Infrastructure/Data/SeedData/categories.json");
                     var categories = JsonSerializer.Deserialize<List<Category>>(categoriesJson);
-
-                    foreach (var category in categories)
-                    {
-                        context.Categories.Add(category);
-                    }
 
                     var productsJson = File.ReadAllText("../Infrastructure/Data/SeedData/products.json");
                     var productsTemp = JsonSerializer.Deserialize<List<ProductJson>>(productsJson);
@@ -50,17 +40,40 @@ namespace Infrastructure.Data
                             Price = productTemp.Price,
                             PreviousPrice = productTemp.PreviousPrice,
                             Description = productTemp.Description,
-                            PictureUrl = productTemp.PictureUrl,
+                            ImageUrl = productTemp.ImageUrl,
                             Rating = productTemp.Rating,
-                            Brand = brands[productTemp.BrandId - 1],
+                            BrandId = productTemp.BrandId,
                             Categories = new List<Category>(),
                         };
 
+                        product.Brand = brands.Where(x => x.Id == product.BrandId).FirstOrDefault();
+
                         foreach (var categoryId in productTemp.CategoryIds)
                         {
-                            product.Categories.Add(categories[categoryId - 1]);
+                            product.Categories.Add(categories.Where(x=>x.Id == categoryId).FirstOrDefault());
                         }
 
+                        products.Add(product);
+                    }
+
+
+                    // Add seed objects to the database
+                    // Id values need to be reset to zero because SQL Server will assign them automatically.
+                    foreach (var brand in brands)
+                    {
+                        brand.Id = 0;
+                        context.Brands.Add(brand);
+                    }
+
+                    foreach (var category in categories)
+                    {
+                        category.Id = 0;
+                        context.Categories.Add(category);
+                    }
+
+                    foreach (var product in products)
+                    {
+                        // product.id is not assigned by the json file, therefore no need to reset the id value.
                         context.Products.Add(product);
                     }
 
@@ -74,6 +87,7 @@ namespace Infrastructure.Data
             }
         }
 
+        // This ProductJson class maps directly to the objects in the products.json file.
         private class ProductJson
         {
             public string Name { get; set; }
@@ -83,12 +97,9 @@ namespace Infrastructure.Data
             public decimal PreviousPrice { get; set; }
             public string Description { get; set; }
             public int Rating { get; set; }
-            public string PictureUrl { get; set; }
+            public string ImageUrl { get; set; }
 
-            //public Brand Brand { get; set; }
             public int BrandId { get; set; }
-
-            //public ICollection<ProductCategory> CategoriesLink { get; set; } = new List<ProductCategory>();
             public IList<int> CategoryIds { get; set; } = new List<int>();
         }
     }

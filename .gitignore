@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# my local files
+promoItems.json
+
 # User-specific files
 *.rsuser
 *.suo

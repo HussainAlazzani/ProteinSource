@@ -1,35 +1,46 @@
 [
-	{
-		"Name": "Whey"
-	},
-	{
-		"Name": "Casein"
-	},
-	{
-		"Name": "Mass Gainer"
-	},
-	{
-		"Name": "Lean"
-	},
-	{
-		"Name": "New"
-	},
-	{
-		"Name": "Vegan"
-	},
-	{
-		"Name": "Preworkout"
-	},
-	{
-		"Name": "Creatine"
-	},
-	{
-		"Name": "BCAA"
-	},
-	{
-		"Name": "Bars"
-	},
-	{
-		"Name": "Bottles"
-	}
+  {
+    "Id": 1,
+    "Name": "Whey"
+  },
+  {
+    "Id": 2,
+    "Name": "Casein"
+  },
+  {
+    "Id": 3,
+    "Name": "Mass Gainer"
+  },
+  {
+    "Id": 4,
+    "Name": "Lean"
+  },
+  {
+    "Id": 5,
+    "Name": "New"
+  },
+  {
+    "Id": 6,
+    "Name": "Vegan"
+  },
+  {
+    "Id": 7,
+    "Name": "Preworkout"
+  },
+  {
+    "Id": 8,
+    "Name": "Creatine"
+  },
+  {
+    "Id": 9,
+    "Name": "BCAA"
+  },
+  {
+    "Id": 10,
+    "Name": "Bars"
+  },
+  {
+    "Id": 11,
+    "Name": "Bottles"
+  }
 ]

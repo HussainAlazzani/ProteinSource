@@ -14,7 +14,7 @@ namespace Core.Entities
         public decimal PreviousPrice { get; set; }
         public string Description { get; set; }
         public int Rating { get; set; }
-        public string PictureUrl { get; set; }
+        public string ImageUrl { get; set; }
 
         public Brand Brand { get; set; }
         public int BrandId { get; set; }
